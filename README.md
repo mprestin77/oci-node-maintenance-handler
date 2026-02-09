@@ -55,15 +55,18 @@ Allow dynamic-group <Group_Name> to inspect instances in compartment <Compartmen
 Go to **Observability & Management** > **Events Service** > **Rules**.
 Create a Rule:
 Service Name: **Compute**
-Add the Event Types: 
+Add the Event Types:
+```text
 **Instance Maintenance**
 **Instance Maintenance-begin**
 **Instance Maintenance-end**
+```
 
 Action:
 Action Type: **Streaming**
 Compartment: select the compartment where the stream was created
-Stream: select the stream you created in [Setup OCI Streaming](https://github.com/mprestin77/oci-node-maintenance-handler/blob/main/README.md###Setup OCI Streaming)
+Stream: select the stream you created in [Setup OCI Streaming](https://github.com/mprestin77/oci-node-maintenance-handler/blob/master/README.md#1-setup-oci-streaming)
+
 5. Deploy to OKE
 Apply the manifests:
 bash
