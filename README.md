@@ -77,7 +77,7 @@ kubectl create namespace wd
 Edit config.map file and set the following environment variables
 ```text
 WD_STREAM_ID	         OCID of your OCI Stream.
-WD_STREAM_ENDPOINT	i  Your Messages Endpoint URL.
+WD_STREAM_ENDPOINT	   Your Messages Endpoint URL.
 WD_NODEPOOL             OKE nodepool name
 WD_NAMESPACE            Kubernetes namespace used by ONMH jobs (e.g. `wd`) 
 ```
@@ -97,11 +97,15 @@ kubectl -n wd apply -f rbac.yaml
 kubectl -n wd apply -f wd.yaml
 ```
 
-#### 3. Check that Watchdog container is running
+To check that Watchdog container is running
 ```text
 kubectl -n wd get pods
 NAME                                                READY   STATUS      RESTARTS   AGE
 wd-6bdbb448ff-h54ln                                 1/1     Running     0          10s
+```
+If the status is not "Running" get the pod logs to see the error, for example:
+```text
+kubectl -n wd describe pod wd-6bdbb448ff-h54ln
 ```
 
 🔍 Verification
@@ -111,8 +115,8 @@ ENCODED_VAL=$(echo '{"eventType": "com.oraclecloud.computeapi.maintenanceresched
 oci streaming stream message put --stream-id <OCID> --messages '[{"key": "dGVzdA==", "value": "'$ENCODED_VAL'"}]' --endpoint <Endpoint>
 Use code with caution.
 
-Check logs:
-kubectl logs -f -n wd -l app=oci-node-maintenance-handler
+Check Watchdog logs:
+kubectl -n wd logs -f -l app=watchdog
 
 
 
