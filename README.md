@@ -51,7 +51,7 @@ Allow dynamic-group <Group_Name> to use stream-family in compartment <Compartmen
 Allow dynamic-group <Group_Name> to inspect instances in compartment <Compartment_Name>
 ```
 
-3. Create the OCI Event Rule
+### 3. Create the OCI Event Rule
 Go to **Observability & Management** > **Events Service** > **Rules**.
 Create an event rule with **Condition** set to **Event Type** and **Service Name** set to **Block Volume**. Add the following filters in **Event Type**:
 ```text
@@ -67,7 +67,7 @@ Stream: select the stream you created in [Setup OCI Streaming](https://github.co
 ![image](https://github.com/mprestin77/oci-node-maintenance-handler/blob/master/images/EventRule.png)
 
 
-5. Deploy to OKE
+### 4. Deploy to OKE
 Apply the manifests:
 bash
 # 1. Create namespace
