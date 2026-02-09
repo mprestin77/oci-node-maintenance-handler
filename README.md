@@ -38,7 +38,7 @@ Create a Stream to act as the message bus:
 4. Note the **Messages Endpoint** and **Stream OCID**.
 
 ### 2. Configure IAM Policies
-Create a **Dynamic Group** containing your OKE worker nodes:
+Create a [dynamic group](https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingdynamicgroups.htm) containing your OKE worker nodes:
 
 **Dynamic Group Rule:**
 ```text
@@ -54,7 +54,11 @@ Allow dynamic-group <Group_Name> to inspect instances in compartment <Compartmen
 3. Create the OCI Event Rule
 Go to **Observability & Management** > **Events Service** > **Rules**.
 Create a Rule:
+
+Condition: **Event Type**
+
 Service Name: **Compute**
+
 Add the Event Types:
 ```text
 Instance Maintenance
