@@ -4,11 +4,11 @@ The **OCI Node Maintenance Handler** is an open-source lifecycle automation tool
 
 ---
 
-## 🚀 How It Works
+## How It Works
 
 The handler operates as a serverless-to-cluster workflow:
 
-1.  **Capture:** An [OCI Event Service](https://docs.oracle.com) rule identifies `com.oraclecloud.computeapi.maintenancerescheduled` events.
+1.  **Capture:** An [OCI Event Service](https://(https://docs.oracle.com/en-us/iaas/Content/Streaming/Concepts/streamingoverview.htm)) rule identifies `com.oraclecloud.computeapi.maintenancerescheduled` events.
 2.  **Transport:** Events are routed to an [OCI Streaming](https://docs.oracle.com) queue.
 3.  **Process:** A lightweight **Python-based Watchdog pod** running in your OKE cluster monitors the stream.
 4.  **Schedule:** 
