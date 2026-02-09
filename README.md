@@ -115,25 +115,6 @@ Check logs:
 kubectl logs -f -n wd -l app=oci-node-maintenance-handler
 
 
-## How It Workis
-
-1.  **Capture:** An [OCI Event Service](https://docs.oracle.com) rule identifies `com.oraclecloud.computeapi.maintenancerescheduled` events.
-2.  **Transport:** Events are routed to an [OCI Streaming](https://docs.oracle.com) queue.
-3.  **Process:** A lightweight **Python-based Watchdog pod** running in your OKE cluster monitors the stream.
-4.  **Schedule:** 
-    *   If maintenance is in the future, the handler creates a **Kubernetes CronJob** scheduled to trigger **15 minutes** before the maintenance window.
-    *   If the event is immediate (e.g., Preemptible/Spot termination), it triggers an **immediate Kubernetes Job**.
-5.  **Drain:** The job executes a `kubectl drain` with safety flags (`--ignore-daemonsets`, `--delete-emptydir-data`, `--force`) to migrate workloads.
-6.  **Recover:** Once a `maintenance-end` event is detected, the handler automatically **uncordons** the node.
-
-## Key Features
-
-*   **Native OCI Integration:** Uses **Instance Principals** for secure, keyless authentication.
-*   **Time-Aware Orchestration:** Robust ISO-8601 parsing to handle OCI-specific maintenance timestamps.
-*   **Cluster-Safe RBAC:** Leverages **ClusterRoles** to manage node states without over-privileged accounts.
-*   **Self-Cleaning:** Automated cleanup of completed jobs using `ttlSecondsAfterFinished`.
-
----
 
 
 ## 🏗 Architecture Diagram
