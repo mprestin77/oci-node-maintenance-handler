@@ -67,7 +67,7 @@ Stream: select the stream you created in [Setup OCI Streaming](https://github.co
 ![image](https://github.com/mprestin77/oci-node-maintenance-handler/blob/master/images/EventRule.png)
 
 
-### 4. Deploy to OKE
+#### 4. Deploy to OKE
 Apply the manifests:
 bash
 ## 1. Create namespace
