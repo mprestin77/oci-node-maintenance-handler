@@ -1,0 +1,37 @@
+{
+  "eventType": "com.oraclecloud.computeapi.instancemaintenance",
+  "cloudEventsVersion": "0.1",
+  "eventTypeVersion": "2.0",
+  "source": "ComputeApi",
+  "eventTime": "2026-02-5T12:00:00.000Z",
+  "contentType": "application/json",
+  "data": {
+    "compartmentId": "compartment-id=ocid1.compartment.oc1..aaaaaaaak4br2cpp6gggpquw6omq7ocf2kinkz3qi5oyjbispxped525cdga",
+    "compartmentName": "example_compartment",
+    "resourceName": "maintenance_name",
+    "resourceId": "ocid1.instancemaintenanceevent.oc1.phx.xxxxxxxxxx",
+    "availabilityDomain": "AD1",
+    "additionalDetails": {
+      "instanceId": "ocid1.instance.oc1.iad.anuwcljt22cz7wqcc253ys2q3dwzucbdsjt3ccqvumcubc7mmdk4jg5ateca",
+      "lifecycleState": "SCHEDULED",
+      "maintenanceCategory": "FLEXIBLE",
+      "canReschedule": true,
+      "description": "Oracle scheduled a required maintenance action for your instance.",
+      "maintenanceReason": "HARDWARE_REPLACEMENT",
+      "instanceAction": "None",
+      "alternativeResolutionActions": [
+        "REBOOT_MIGRATE",
+        "TERMINATE"
+      ],
+      "timeWindowStart": "2026-02-8T16:55:00.000Z",
+      "startWindowDuration": "P1D",
+      "estimatedDuration": "P5D",
+      "correlationToken": "",
+      "schemaVersion": 1
+    }
+  },
+  "eventID": "unique_ID",
+  "extensions": {
+    "compartmentId": "compartment-id=ocid1.compartment.oc1..aaaaaaaak4br2cpp6gggpquw6omq7ocf2kinkz3qi5oyjbispxped525cdga"
+  }
+}

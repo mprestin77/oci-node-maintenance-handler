@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "wd"
+  namespace: wd
+data:
+  WD_STREAM_ENDPOINT: "https://rdz33fyp7etq.streaming.us-ashburn-1.oci.oraclecloud.com"
+  WD_STREAM_OCID: "ocid1.stream.oc1.iad.amaaaaaa22cz7wqar4hixoqhpcmddok5wor2txxbisu7h3iwrrlwpi5tcq3a"
+  WD_NODEPOOL: "wd-nodepool"
+  WD_NAMESPACE: "wd"
