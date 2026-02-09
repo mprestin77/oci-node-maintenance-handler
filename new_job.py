@@ -56,6 +56,7 @@ def create_drain_job(hostname, m_start=None):
                schedule=cron_schedule,
                job_template=client.V1JobTemplateSpec(
                    spec=client.V1JobSpec(
+                      ttlSecondsAfterFinished: 3600
                       template=client.V1PodTemplateSpec(
                         spec=client.V1PodSpec(
                             service_account_name="wd-service", # Ensure RBAC exists
@@ -92,6 +93,7 @@ def create_drain_job(hostname, m_start=None):
            kind="Job",
            metadata=client.V1ObjectMeta(name=job_name),
            spec=client.V1JobSpec(
+             ttlSecondsAfterFinished: 3600
              template=client.V1PodTemplateSpec(
                spec=client.V1PodSpec(
                  service_account_name="wd-service", # Ensure RBAC exists
@@ -145,6 +147,7 @@ def create_uncordon_job(hostname):
         kind="Job",
         metadata=client.V1ObjectMeta(name=job_name),
         spec=client.V1JobSpec(
+          ttlSecondsAfterFinished: 3600
           template=client.V1PodTemplateSpec(
             spec=client.V1PodSpec(
               service_account_name="wd-service", # Ensure RBAC exists
