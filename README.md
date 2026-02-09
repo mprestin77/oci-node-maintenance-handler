@@ -38,12 +38,13 @@ Create a **Dynamic Group** containing your OKE worker nodes:
 ```text
 Any {instance.compartment.id = 'ocid1.compartment.oc1..example'}
 Use code with caution.
+```
 
 Policy for the Dynamic Group:
-text
+```text
 Allow dynamic-group <Group_Name> to use stream-family in compartment <Compartment_Name>
 Allow dynamic-group <Group_Name> to inspect instances in compartment <Compartment_Name>
-Use code with caution.
+```
 
 3. Create the OCI Event Rule
 Go to Observability & Management > Events Service > Rules.
@@ -65,7 +66,7 @@ kubectl apply -f k8s/rbac.yaml
 
 # 3. Deploy Watchdog
 kubectl apply -f k8s/deployment.yaml
-Use code with caution.
+
 
 Required Environment Variables:
 Variable	Description
