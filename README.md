@@ -1,8 +1,6 @@
 # OCI Node Maintenance Handler (ONMH)
 
-The **OCI Node Maintenance Handler** is an open-source lifecycle automation tool designed to ensure high availability for Kubernetes applications running on **Oracle Cloud Infrastructure (OCI) Container Engine for Kubernetes (OKE)**. 
-
-This project provides a native OCI solution for gracefully handling **Compute Maintenance Events**. By proactively draining nodes before maintenance begins and automatically reintegrating them once completed, ONMH minimizes application downtime and manual operational overhead.
+The **OCI Node Maintenance Handler** is an open-source lifecycle automation tool designed to ensure high availability for Kubernetes applications running on **Oracle Cloud Infrastructure (OCI) Container Engine for Kubernetes (OKE)**. This project provides a native OCI solution for gracefully handling **Compute Maintenance Events**. By proactively draining nodes before maintenance begins and automatically reintegrating them once completed, ONMH minimizes application downtime and manual operational overhead.
 
 ---
 
