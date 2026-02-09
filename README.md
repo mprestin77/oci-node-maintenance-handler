@@ -43,7 +43,7 @@ Create a **Dynamic Group** containing your OKE worker nodes:
 **Dynamic Group Rule:**
 ```text
 Any {instance.compartment.id = 'ocid1.compartment.oc1..example'}
-```text
+```
 
 Policy for the Dynamic Group:
 ```text
