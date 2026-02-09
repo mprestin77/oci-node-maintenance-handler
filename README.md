@@ -84,7 +84,9 @@ Required Environment Variables:
 Variable	Description
 WD_STREAM_ID	The OCID of your OCI Stream.
 WD_STREAM_ENDPOINT	Your Messages Endpoint URL.
-PYTHONUNBUFFERED	Set to 1 for real-time logs.
+WD_NODEPOOL             OKE nodepool name
+WD_NAMESPACE            Kubernetes namespace used by ONMH 
+
 🔍 Verification
 Simulate an event via OCI CLI:
 bash
@@ -94,11 +96,6 @@ Use code with caution.
 
 Check logs:
 kubectl logs -f -n wd -l app=oci-node-maintenance-handler
-
-Would you like to include a **Troubleshooting** section or the **Architecture Diagram** logic next?
-
-
-
 
 
 ## How It Workis
@@ -121,68 +118,6 @@ Would you like to include a **Troubleshooting** section or the **Architecture Di
 
 ---
 
-## Deployment Guide
-
-### 1. Setup OCI Streaming
-Create a Stream to act as the message bus:
-1. Go to **Analytics & AI** > **Messaging** > **Streaming**.
-2. Create a **Stream Pool** (Private Endpoint recommended).
-3. Create a **Stream** named `node-maintenance-stream`.
-4. Note the **Messages Endpoint** and **Stream OCID**.
-
-### 2. Configure IAM Policies
-Create a **Dynamic Group** containing your OKE worker nodes:
-
-**Dynamic Group Rule:**
-```text
-Any {instance.compartment.id = 'ocid1.compartment.oc1..example'}
-Use code with caution.
-```
-
-Policy for the Dynamic Group:
-```text
-Allow dynamic-group <Group_Name> to use stream-family in compartment <Compartment_Name>
-Allow dynamic-group <Group_Name> to inspect instances in compartment <Compartment_Name>
-```
-
-3. Create the OCI Event Rule
-Go to Observability & Management > Events Service > Rules.
-Create a Rule:
-Service Name: Compute
-Event Type: Instance - Maintenance Rescheduled
-Action:
-Action Type: Streaming
-Stream: node-maintenance-stream
-
-4. Deploy to OKE
-Apply the manifests:
-bash
-# 1. Create namespace
-kubectl create namespace wd
-
-# 2. Apply RBAC
-kubectl apply -f k8s/rbac.yaml
-
-# 3. Deploy Watchdog
-kubectl apply -f k8s/deployment.yaml
-
-
-Required Environment Variables:
-Variable	Description
-WD_STREAM_ID	The OCID of your OCI Stream.
-WD_STREAM_ENDPOINT	Your Messages Endpoint URL.
-WD_NODEPOOL             OKE nodepool name
-WD_NAMESPACE            Kubernetes namespace used by ONMH 
-
-🔍 Verification
-Simulate an event via OCI CLI:
-bash
-ENCODED_VAL=$(echo '{"eventType": "com.oraclecloud.computeapi.maintenancerescheduled", "data": {"resourceId": "ocid1.instance.oc1..example"}}' | base64)
-oci streaming stream message put --stream-id <OCID> --messages '[{"key": "dGVzdA==", "value": "'$ENCODED_VAL'"}]' --endpoint <Endpoint>
-Use code with caution.
-
-Check logs:
-kubectl logs -f -n wd -l app=oci-node-maintenance-handler
 
 ## 🏗 Architecture Diagram
 
