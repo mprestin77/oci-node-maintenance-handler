@@ -13,13 +13,13 @@ The handler operates as a serverless-to-cluster workflow:
 3.  **Process:** A lightweight **Python-based Watchdog pod** running in your OKE cluster monitors the stream.
 4.  **Schedule:** 
     *   If maintenance is in the future, the handler creates a **Kubernetes CronJob** scheduled to trigger **15 minutes** before the maintenance window.
-    *   If the event is immediate (e.g., Preemptible/Spot termination), it triggers an **immediate Kubernetes Job**.
+    *   If the event is immediate (e.g. `maintenance-begin event`), it triggers an **immediate Kubernetes Job**.
 5.  **Drain:** The job executes a `kubectl drain` with safety flags (`--ignore-daemonsets`, `--delete-emptydir-data`, `--force`) to migrate workloads.
 6.  **Recover:** Once a `maintenance-end` event is detected, the handler automatically **uncordons** the node.
 
 ---
 
-## 🛠 Key Features
+## Key Features
 
 *   **Native OCI Integration:** Uses **Instance Principals** for secure, keyless authentication.
 *   **Time-Aware Orchestration:** Robust ISO-8601 parsing to handle OCI-specific maintenance timestamps.
@@ -28,7 +28,7 @@ The handler operates as a serverless-to-cluster workflow:
 
 ---
 
-## 🚀 Deployment Guide
+## Deployment Guide
 
 ### 1. Setup OCI Streaming
 Create a Stream to act as the message bus:
@@ -43,23 +43,28 @@ Create a **Dynamic Group** containing your OKE worker nodes:
 **Dynamic Group Rule:**
 ```text
 Any {instance.compartment.id = 'ocid1.compartment.oc1..example'}
-Use code with caution.
+```text
 
 Policy for the Dynamic Group:
-text
+```text
 Allow dynamic-group <Group_Name> to use stream-family in compartment <Compartment_Name>
 Allow dynamic-group <Group_Name> to inspect instances in compartment <Compartment_Name>
-Use code with caution.
+```
 
 3. Create the OCI Event Rule
-Go to Observability & Management > Events Service > Rules.
+Go to **Observability & Management** > **Events Service** > **Rules**.
 Create a Rule:
-Service Name: Compute
-Event Type: Instance - Maintenance Rescheduled
+Service Name: **Compute**
+Add the Event Types: 
+**Instance Maintenance**
+**Instance Maintenance-begin**
+**Instance Maintenance-end**
+
 Action:
-Action Type: Streaming
-Stream: node-maintenance-stream
-4. Deploy to OKE
+Action Type: **Streaming**
+Compartment: select the compartment where the stream was created
+Stream: select the stream you created in [Setup OCI Streaming](https://github.com/mprestin77/oci-node-maintenance-handler/blob/main/README.md###Setup OCI Streaming)
+5. Deploy to OKE
 Apply the manifests:
 bash
 # 1. Create namespace
