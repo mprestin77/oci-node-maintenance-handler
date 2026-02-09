@@ -57,9 +57,9 @@ Create a Rule:
 Service Name: **Compute**
 Add the Event Types:
 ```text
-**Instance Maintenance**
-**Instance Maintenance-begin**
-**Instance Maintenance-end**
+Instance Maintenance
+Instance Maintenance-begin
+Instance Maintenance-end
 ```
 
 Action:
