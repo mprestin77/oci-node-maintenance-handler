@@ -67,25 +67,42 @@ Stream: select the stream you created in [Setup OCI Streaming](https://github.co
 ![image](https://github.com/mprestin77/oci-node-maintenance-handler/blob/master/images/EventRule.png)
 
 
-#### 4. Deploy to OKE
+### 4. Deploy to OKE
 Apply the manifests:
 bash
-## 1. Create namespace
+#### 1. Create namespace
 kubectl create namespace wd
 
-# 2. Apply RBAC
-kubectl apply -f k8s/rbac.yaml
-
-# 3. Deploy Watchdog
-kubectl apply -f k8s/deployment.yaml
-Use code with caution.
-
-Required Environment Variables:
-Variable	Description
-WD_STREAM_ID	The OCID of your OCI Stream.
-WD_STREAM_ENDPOINT	Your Messages Endpoint URL.
+#### 1. Create config map
+Edit config.map file and set the following environment variables
+```text
+WD_STREAM_ID	         OCID of your OCI Stream.
+WD_STREAM_ENDPOINT	i  Your Messages Endpoint URL.
 WD_NODEPOOL             OKE nodepool name
-WD_NAMESPACE            Kubernetes namespace used by ONMH 
+WD_NAMESPACE            Kubernetes namespace used by ONMH jobs (e.g. `wd`) 
+```
+
+Create the config map
+```text
+kubectl -n wd apply -f config.map
+```
+
+#### 2. Apply RBAC
+```text
+kubectl -n wd apply -f rbac.yaml
+```
+
+#### 3. Deploy Watchdog
+```text
+kubectl -n wd apply -f wd.yaml
+```
+
+#### 3. Check that Watchdog container is running
+```text
+kubectl -n wd get pods
+NAME                                                READY   STATUS      RESTARTS   AGE
+wd-6bdbb448ff-h54ln                                 1/1     Running     0          10s
+```
 
 🔍 Verification
 Simulate an event via OCI CLI:
