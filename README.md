@@ -70,7 +70,7 @@ Stream: select the stream you created in [Setup OCI Streaming](https://github.co
 ### 4. Deploy to OKE
 Apply the manifests:
 bash
-# 1. Create namespace
+## 1. Create namespace
 kubectl create namespace wd
 
 # 2. Apply RBAC
