@@ -108,7 +108,7 @@ If the status is not "Running" get the pod logs to see the error, for example:
 kubectl -n wd describe pod wd-6bdbb448ff-h54ln
 ```
 
-#### 3. Verify that ONMH is working
+#### 4. Verify that ONMH is working
 Go to **Observability & Management** > **Events Service** > **Rules**. Open the event rule that you created and click on "View example events (JSON). In **Event Type** select **Instance Maintenance Event - Scheduled**.
 it shows event JSON, for example:
 ```text
