@@ -177,6 +177,7 @@ chmod +x send_event.sh
 ```
 
 Check Watchdog logs:
+```test
 kubectl -n wd logs -f -l app=watchdog
 
  Creating a cursor for group wd-group, instance wd-instance-1
@@ -186,6 +187,7 @@ Nodepool: wd-nodepool
 Namespace: wd
 Creating drain cron job
 Job created. status='{'active': None, 'last_schedule_time': None, 'last_successful_time': None}'
+```
 
 Check that the cronjob was created, for example:
 ```text
