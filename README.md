@@ -108,17 +108,109 @@ If the status is not "Running" get the pod logs to see the error, for example:
 kubectl -n wd describe pod wd-6bdbb448ff-h54ln
 ```
 
-🔍 Verification
-Simulate an event via OCI CLI:
-bash
-ENCODED_VAL=$(echo '{"eventType": "com.oraclecloud.computeapi.maintenancerescheduled", "data": {"resourceId": "ocid1.instance.oc1..example"}}' | base64)
-oci streaming stream message put --stream-id <OCID> --messages '[{"key": "dGVzdA==", "value": "'$ENCODED_VAL'"}]' --endpoint <Endpoint>
-Use code with caution.
+#### 3. Verify that ONMH is working
+Go to **Observability & Management** > **Events Service** > **Rules**. Open the event rule that you created and click on "View example events (JSON). In **Event Type** select **Instance Maintenance Event - Scheduled**.
+it shows event JSON, for example:
+
+{
+  "eventType": "com.oraclecloud.computeapi.instancemaintenance",
+  "cloudEventsVersion": "0.1",
+  "eventTypeVersion": "2.0",
+  "source": "ComputeApi",
+  "eventTime": "2023-08-18T12:00:00.000Z",
+  "contentType": "application/json",
+  "data": {
+    "compartmentId": "ocid1.compartment.oc1..unique_ID",
+    "compartmentName": "example_compartment",
+    "resourceName": "maintenance_name",
+    "resourceId": "ocid1.instancemaintenanceevent.oc1.phx.unique_ID",
+    "availabilityDomain": "availability_domain",
+    "additionalDetails": {
+      "instanceId": "ocid1.instance.oc1.phx.<unique_ID>",
+      "lifecycleState": "SCHEDULED",
+      "maintenanceCategory": "FLEXIBLE",
+      "canReschedule": true,
+      "description": "Oracle scheduled a required maintenance action for your instance.",
+      "maintenanceReason": "HARDWARE_REPLACEMENT",
+      "instanceAction": "None",
+      "alternativeResolutionActions": [
+        "REBOOT_MIGRATE",
+        "TERMINATE"
+      ],
+      "timeWindowStart": "2023-09-18T12:00:00.000Z",
+      "startWindowDuration": "P1D",
+      "estimatedDuration": "P5D",
+      "correlationToken": "",
+      "schemaVersion": 1
+    }
+  },
+  "eventID": "unique_ID",
+  "extensions": {
+    "compartmentId": "ocid1.compartment.oc1..unique_ID"
+  }
+}
+
+Copy the event JSON to your current directory and replace the values for the following attributes:
+```text
+compartmentId 
+instanceId
+timeWindowStart
+```
+Set **compartmentId** to your compartment OCID, **instanceId** to your instance OCID, and **timeWindowStart** to the current UTC time (add 5-10 minutes to it to make sure that the time has not passed yet).  
+
+Create a shell script using OCI CLI:
+```text
+# Encode the file 'event.json' into a variable
+ENCODED_JSON=$(base64 -w 0 $1)
+
+# Use it in the CLI command
+oci streaming stream message put \
+  --stream-id ocid1.stream.oc1.iad.amaaaaaa22cz7wqar4hixoqhpcmddok5wor2txxbisu7h3iwrrlwpi5tcq3a \
+  --messages '[{"key": "bWFpbnRlbmFuY2U=", "value": "'$ENCODED_JSON'"}]' \
+  --endpoint https://rdz33fyp7etq.streaming.us-ashburn-1.oci.oraclecloud.com 
+```
+
+Save the script as send_event.sh. Add executable permission to the script and run it
+```text
+chmod +x send_event.sh
+./send_event.sh  <JSON file name>
+```
 
 Check Watchdog logs:
 kubectl -n wd logs -f -l app=watchdog
 
+ Creating a cursor for group wd-group, instance wd-instance-1
+Instance name: oke-cbthogqqnma-nbns46fu7gq-sxmiigemzuq-3
+Found node name: 10.0.10.109
+Nodepool: wd-nodepool
+Namespace: wd
+Creating drain cron job
+Job created. status='{'active': None, 'last_schedule_time': None, 'last_successful_time': None}'
 
+Check that the cronjob was created, for example:
+```text
+kubectl -n wd get cronjobs
+NAME                                 SCHEDULE      TIMEZONE   SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+scheduled-drain-10.0.10.109-011213   45 2 10 2 *   <none>     False     0        <none>          2m35s
+```
+
+Monnitor running job - 15 min before the maintenance time you should see the drain job running
+```text
+kubectl -n wd get jobs --watch
+NAME                                          STATUS     COMPLETIONS   DURATION   AGE
+immediate-drain-10.0.10.109-165631            Running   1/1           15s        32h
+```
+Once the job status is "Complete" check that the node is cordoned and drained, for example:
+```text
+kubectl get nodes
+NAME          STATUS                     ROLES   AGE   VERSION
+10.0.10.102   Ready                      node    13d   v1.34.1
+10.0.10.109   Ready,SchedulingDisabled   node    12d   v1.34.1
+10.0.10.211   Ready                      node    12d   v1.34.1
+10.0.10.51    Ready                      node    14d   v1.33.1
+```
+
+Repeat this step with **Event Type** select **Instance Maintenance Event - End**. After sending this event using send_event.sh script the node must be uncordoned.
 
 
 ## 🏗 Architecture Diagram
