@@ -53,7 +53,7 @@ Allow dynamic-group <Group_Name> to inspect instances in compartment <Compartmen
 
 ### 3. Create OCI Event Rule
 Go to **Observability & Management** > **Events Service** > **Rules**.
-Create an event rule with **Condition** set to **Event Type** and **Service Name** set to **Block Volume**. Add the following filters in **Event Type**:
+Create an event rule with **Condition** set to **Event Type** and **Service Name** set to **Compute**. Add the following filters in **Event Type**:
 ```text
 Instance Maintenance
 Instance Maintenance-begin
