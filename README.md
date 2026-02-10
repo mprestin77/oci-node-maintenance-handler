@@ -221,7 +221,7 @@ NAME          STATUS                     ROLES   AGE   VERSION
 10.0.10.51    Ready                      node    14d   v1.33.1
 ```
 
-## 🏗 Architecture Diagram
+## Architecture Diagram
 
 The flow of events from OCI infrastructure to your Kubernetes workload migration:
 
