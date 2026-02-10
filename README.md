@@ -196,7 +196,7 @@ NAME                                 SCHEDULE      TIMEZONE   SUSPEND   ACTIVE  
 scheduled-drain-10.0.10.109-011213   45 2 10 2 *   <none>     False     0        <none>          2m35s
 ```
 
-Monnitor running job - 15 min before the maintenance time you should see the drain job running
+Monitor the running job. 15 min before the maintenance time you should see the drain job running
 ```text
 kubectl -n wd get jobs --watch
 NAME                                          STATUS     COMPLETIONS   DURATION   AGE
@@ -210,10 +210,19 @@ NAME          STATUS                     ROLES   AGE   VERSION
 10.0.10.109   Ready,SchedulingDisabled   node    12d   v1.34.1
 10.0.10.211   Ready                      node    12d   v1.34.1
 10.0.10.51    Ready                      node    14d   v1.33.1
+
+kubectl get pods --all-namespaces --field-selector spec.nodeName='10.0.10.109' | grep -v kube-system
+NAMESPACE     NAME                      READY   STATUS    RESTARTS   AGE
 ```
 
-Repeat this step with **Event Type** select **Instance Maintenance Event - End**. After sending this event using send_event.sh script the node must be uncordoned.
+To check that the node is uncordoned after the nodes maintenance ends, repeat this step with **Event Type** set to **Instance Maintenance Event - End**. After sending this event using send_event.sh script the node must be uncordoned.
 
+kubectl get nodes
+NAME          STATUS                     ROLES   AGE   VERSION
+10.0.10.102   Ready                      node    13d   v1.34.1
+10.0.10.109   Ready                      node    12d   v1.34.1
+10.0.10.211   Ready                      node    12d   v1.34.1
+10.0.10.51    Ready                      node    14d   v1.33.1
 
 ## 🏗 Architecture Diagram
 
