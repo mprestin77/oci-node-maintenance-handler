@@ -66,6 +66,31 @@ Under Actions set **Action Type** to **Streaming**, set **Compartment** to the s
 
 ### 4. Deploy to OKE
 
+# Install Docker and Kubectl  
+
+Install docker following docker [documentation](https://docs.docker.com/engine/install/)
+
+Start Docker sevice
+```text
+sudo systemctl enable docker
+sudo systemctl start docker
+```
+Enable docker without sudo for your user account
+```text
+sudo usermod -a -G docker <username>
+```
+Logout and login back to your account. Now you should be able to run docker command without sudo.
+ 
+Install kubectl following Kubernetes [documenentation](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/). 
+
+# Download OKE cluster kube config
+
+```test
+mkdir -p $HOME/.kube
+oci ce cluster create-kubeconfig --cluster-id 'cluster-OCID' --file $HOME/.kube/config --region 'region name' --token-version 2.0.0 --kube-endpoint PRIVATE_ENDPOINT
+export KUBECONFIG=$HOME/.kube/config
+```
+
 #### Create namespace
 ```text
 kubectl create namespace wd
