@@ -111,7 +111,7 @@ kubectl -n wd describe pod wd-6bdbb448ff-h54ln
 #### 3. Verify that ONMH is working
 Go to **Observability & Management** > **Events Service** > **Rules**. Open the event rule that you created and click on "View example events (JSON). In **Event Type** select **Instance Maintenance Event - Scheduled**.
 it shows event JSON, for example:
-
+```text
 {
   "eventType": "com.oraclecloud.computeapi.instancemaintenance",
   "cloudEventsVersion": "0.1",
@@ -149,7 +149,7 @@ it shows event JSON, for example:
     "compartmentId": "ocid1.compartment.oc1..unique_ID"
   }
 }
-
+```
 Copy the event JSON to your current directory and replace the values for the following attributes:
 ```text
 compartmentId 
