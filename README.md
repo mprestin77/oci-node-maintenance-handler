@@ -150,7 +150,7 @@ it shows event JSON, for example:
   }
 }
 ```
-Copy the event JSON to your current directory and replace the values for the following attributes:
+Copy the event JSON to a file your current directory and replace the values for the following attributes:
 ```text
 compartmentId 
 instanceId
