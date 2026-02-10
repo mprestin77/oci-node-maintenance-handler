@@ -51,7 +51,7 @@ Allow dynamic-group <Group_Name> to use stream-family in compartment <Compartmen
 Allow dynamic-group <Group_Name> to inspect instances in compartment <Compartment_Name>
 ```
 
-### 3. Create the OCI Event Rule
+### 3. Create OCI Event Rule
 Go to **Observability & Management** > **Events Service** > **Rules**.
 Create an event rule with **Condition** set to **Event Type** and **Service Name** set to **Block Volume**. Add the following filters in **Event Type**:
 ```text
