@@ -67,7 +67,9 @@ Under Actions set **Action Type** to **Streaming**, set **Compartment** to the s
 ### 4. Deploy to OKE
 
 #### Create namespace
+```text
 kubectl create namespace wd
+```
 
 #### Create config map
 Edit config.map file and set the following environment variables
