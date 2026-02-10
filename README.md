@@ -65,12 +65,11 @@ Under Actions set **Action Type** to **Streaming**, set **Compartment** to the s
 
 
 ### 4. Deploy to OKE
-Apply the manifests:
-bash
-#### 1. Create namespace
+
+#### Create namespace
 kubectl create namespace wd
 
-#### 1. Create config map
+#### Create config map
 Edit config.map file and set the following environment variables
 ```text
 WD_STREAM_ID	         OCID of your OCI Stream.
@@ -84,12 +83,12 @@ Create the config map
 kubectl -n wd apply -f config.map
 ```
 
-#### 2. Apply RBAC
+#### Apply RBAC
 ```text
 kubectl -n wd apply -f rbac.yaml
 ```
 
-#### 3. Deploy Watchdog
+#### Deploy Watchdog
 ```text
 kubectl -n wd apply -f wd.yaml
 ```
@@ -105,7 +104,7 @@ If the status is not "Running" get the pod logs to see the error, for example:
 kubectl -n wd describe pod wd-6bdbb448ff-h54ln
 ```
 
-#### 4. Verify that ONMH is working
+#### Verify that ONMH is working
 Go to **Observability & Management** > **Events Service** > **Rules**. Open the event rule that you created and click on "View example events (JSON). In **Event Type** select **Instance Maintenance Event - Scheduled**.
 it shows event JSON, for example:
 ```text
