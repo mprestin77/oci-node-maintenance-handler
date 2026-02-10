@@ -215,14 +215,15 @@ kubectl get pods --all-namespaces --field-selector spec.nodeName='10.0.10.109' |
 NAMESPACE     NAME                      READY   STATUS    RESTARTS   AGE
 ```
 
-To check that the node is uncordoned after the nodes maintenance ends, repeat this step with **Event Type** set to **Instance Maintenance Event - End**. After sending this event using send_event.sh script the node must be uncordoned.
-
+To check that the node is uncordoned after node maintenance ends, repeat this step with **Event Type** set to **Instance Maintenance Event - End**. After sending this event using send_event.sh script the node must be uncordoned.
+```text
 kubectl get nodes
 NAME          STATUS                     ROLES   AGE   VERSION
 10.0.10.102   Ready                      node    13d   v1.34.1
 10.0.10.109   Ready                      node    12d   v1.34.1
 10.0.10.211   Ready                      node    12d   v1.34.1
 10.0.10.51    Ready                      node    14d   v1.33.1
+```
 
 ## 🏗 Architecture Diagram
 
