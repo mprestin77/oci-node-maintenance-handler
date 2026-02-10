@@ -59,10 +59,7 @@ Instance Maintenance
 Instance Maintenance-begin
 Instance Maintenance-end
 ```
-Action:
-Action Type: **Streaming**
-Compartment: select the compartment where the stream was created
-Stream: select the stream you created in [Setup OCI Streaming](https://github.com/mprestin77/oci-node-maintenance-handler/blob/master/README.md#1-setup-oci-streaming)
+Under Actions set **Action Type** to **Streaming**, set **Compartment** to the stream compartent and select the **Stream** that was created in [Setup OCI Streaming](https://github.com/mprestin77/oci-node-maintenance-handler/blob/master/README.md#1-setup-oci-streaming)
 
 ![image](https://github.com/mprestin77/oci-node-maintenance-handler/blob/master/images/EventRule.png)
 
