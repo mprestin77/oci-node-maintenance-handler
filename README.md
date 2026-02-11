@@ -22,7 +22,8 @@ The handler operates as a serverless-to-cluster workflow:
 ## Key Features
 
 *   **Native OCI Integration:** Uses **Instance Principals** for secure, keyless authentication.
-*   **Time-Aware Orchestration:** Robust ISO-8601 parsing to handle OCI-specific maintenance timestamps.
+*   **Event-Driven Automation:** Integrates with the **OCI Event Service** to react to maintenance notifications in real-time, providing a high-performance, push-based alternative to polling.
+*   **Intelligent Scheduling:** Features a built-in logic engine to calculate lead times, ensuring node evacuation triggers precisely 15 minutes before maintenance begins.
 *   **Cluster-Safe RBAC:** Leverages **ClusterRoles** to manage node states without over-privileged accounts.
 *   **Self-Cleaning:** Automated cleanup of completed jobs using `ttlSecondsAfterFinished`.
 
