@@ -90,11 +90,11 @@ docker login -u '<tenancy-namespace>/<domain-name>/<user-name>' iad.ocir.io
 where tenancy-namespace is your OCI [tenancy object storage namespace](https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/understandingnamespaces.htm). Enter password and check that it returns **Login Succeeded**.
 
 #### Build Watchdog Container Image
-To build **Watchdog** container image go to the directory where you cloned the files and run the following command
+To build **Watchdog** container image go to the directory where you cloned the files and run the following command:
 ```text
 docker build -t watchdog:1.0 .
 ```
-Make sure that the container image is successfully created, and check that with 'docker images' command
+Make sure that the container image is successfully created, and check that with 'docker images' command:
 ```text
 docker images
 IMAGE                                            ID             DISK USAGE   CONTENT SIZE   EXTRA      
@@ -226,7 +226,7 @@ Create a shell script using OCI CLI:
 # Encode the file 'event.json' into a variable
 ENCODED_JSON=$(base64 -w 0 $1)
 
-# Use it in the CLI command
+# Use it in the CLI command:
 oci streaming stream message put \
   --stream-id ocid1.stream.oc1.iad.amaaaaaa22cz7wqar4hixoqhpcmddok5wor2txxbisu7h3iwrrlwpi5tcq3a \
   --messages '[{"key": "bWFpbnRlbmFuY2U=", "value": "'$ENCODED_JSON'"}]' \
