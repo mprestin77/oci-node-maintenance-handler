@@ -1,7 +1,7 @@
 import os
 import sys
 from kubernetes import client, config
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import oci
 
 def get_instance_name(instance_ocid):
@@ -39,9 +39,16 @@ def create_drain_job(hostname, m_start=None):
     print(f"Nodepool: {nodepool_name}", flush=True)
     print(f"Namespace: {namespace}", flush=True)
 
-    if m_start is not None: # Create a cronjob to drain the node 15 min before node maintenance starts
+    now = datetime.now(timezone.utc)
+    # Set time zone in the cronjob time
+    if m_start is not None and m_start.tzinfo is None:
+        m_start = m_start.replace(tzinfo=timezone.utc)
+
+    # Create a cronjob to drain the node 15 min before node maintenance starts. Otherwise execute an immediate drain job
+    if m_start is not None and (m_start-now > timedelta(minutes=15)): 
        t = m_start - timedelta(minutes=15)
-       timestamp = datetime.now().strftime("%H%M%S")
+       timestamp = now.strftime("%H%M%S")
+
        cronjob_name = f"scheduled-drain-{node_name}-{timestamp}"
        # Format: minute hour day month day_of_week
        cron_schedule = f"{t.minute} {t.hour} {t.day} {t.month} *"
@@ -56,7 +63,7 @@ def create_drain_job(hostname, m_start=None):
                schedule=cron_schedule,
                job_template=client.V1JobTemplateSpec(
                    spec=client.V1JobSpec(
-                      ttlSecondsAfterFinished: 3600
+                      ttl_seconds_after_finished=3600,
                       template=client.V1PodTemplateSpec(
                         spec=client.V1PodSpec(
                             service_account_name="wd-service", # Ensure RBAC exists
@@ -86,14 +93,14 @@ def create_drain_job(hostname, m_start=None):
 
     else: # Create an immediate job to drain the node
        print("Creating immediate drain job", flush=True)
-       timestamp = datetime.now().strftime("%H%M%S")
+       timestamp = now.strftime("%H%M%S")
        job_name = f"immediate-drain-{node_name}-{timestamp}"
        job = client.V1Job(
            api_version="batch/v1",
            kind="Job",
            metadata=client.V1ObjectMeta(name=job_name),
            spec=client.V1JobSpec(
-             ttlSecondsAfterFinished: 3600
+             ttl_seconds_after_finished=3600,
              template=client.V1PodTemplateSpec(
                spec=client.V1PodSpec(
                  service_account_name="wd-service", # Ensure RBAC exists
@@ -147,7 +154,7 @@ def create_uncordon_job(hostname):
         kind="Job",
         metadata=client.V1ObjectMeta(name=job_name),
         spec=client.V1JobSpec(
-          ttlSecondsAfterFinished: 3600
+          ttl_seconds_after_finished=3600,
           template=client.V1PodTemplateSpec(
             spec=client.V1PodSpec(
               service_account_name="wd-service", # Ensure RBAC exists
