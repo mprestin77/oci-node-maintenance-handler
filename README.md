@@ -147,7 +147,9 @@ image: <registry-domain>/<tenancy-namespace>/wd/watchdog:1.0
 ```
 
 If you are using OCIR registry create a secret
-kubectl --namespace test create secret docker-registry ocirsecret --docker-server=iad.ocir.io --docker-username='<tenancy-namespace>/<user-account>' --docker-password=‘authentication-token' --docker-email='<email>'
+```text
+kubectl -n wd --namespace test create secret docker-registry ocirsecret --docker-server=iad.ocir.io --docker-username='<tenancy-namespace>/<user-account>' --docker-password=‘authentication-token' --docker-email='<email>'
+```
 
 ```text
 kubectl -n wd apply -f wd.yaml
