@@ -74,11 +74,11 @@ Under Actions set **Action Type** to **Streaming**, set **Compartment** to the s
 *   **OKE Cluster Access:** Ensure you have [configured cluster access](https://docs.oracle.com) via your `kubeconfig` file.
 
 #### Copy Files from Github
-Install [git](https://github.com/git-guides/install-git) and clone github files to your local machine or OCI staging VM
+Install [git](https://github.com/git-guides/install-git) and clone the repository to your local machine or OCI staging VM:
 ```text
 git clone https://github.com/mprestin77/oci-node-maintenance-handler.git
 ```
-It should create a "oci-node-maintenance-handler" directory with the files cloned from the github
+This command creates a directory named oci-node-maintenance-handler containing the source files. After cloning, navigate into the new directory to begin the setup.
 
 #### Login to OCI Container Registry
 
@@ -113,13 +113,13 @@ where tenancy-namespace is your OCI [tenancy object storage namespace](https://d
 *Note: This example shows how to push images to OCIR, but if you prefer using a different container registry push the image to the registry you want to use.*
  
 #### Create Namespace
-Create a Kubernetes namespace used by ONMH containers  
+Create a Kubernetes namespace used by ONMH containers: 
 ```text
 kubectl create namespace wd
 ```
 
 #### Create Config Map
-Edit config.map file and set the following environment variables
+Edit config.map file and set the following environment variables:
 ```text
 WD_STREAM_ID	         OCID of your OCI Stream.
 WD_STREAM_ENDPOINT	   Your Messages Endpoint URL.
@@ -127,12 +127,13 @@ WD_NODEPOOL             OKE nodepool name
 WD_NAMESPACE            Kubernetes namespace used by ONMH jobs (e.g. `wd`) 
 ```
 
-Create the config map
+Create the config map:
 ```text
 kubectl -n wd apply -f config.map
 ```
 
 #### Apply RBAC
+Create Kubernetes RBAC role and sevice account:
 ```text
 kubectl -n wd apply -f rbac.yaml
 ```
@@ -150,19 +151,19 @@ kubectl create secret docker-registry ocirsecret \
 ```
   
 #### Deploy a Watchdog Container
-Edit wd.yaml file and replace image repo with your registry  
+Edit wd.yaml file and replace image repo with your registry:  
 ```text
 image: <region-code>.ocir.co/<tenancy-namespace>/wd/watchdog:1.0
 ```
 
 *Note: If you are using a private container registry, insure that the secret name matches the secret that you created to pull the image.*
 
-Deploy Watchdog container
+Deploy Watchdog container:
 ```text
 kubectl -n wd apply -f wd.yaml
 ```
 
-To check that Watchdog container is running
+To check that Watchdog container is running:
 ```text
 kubectl -n wd get pods
 NAME                                                READY   STATUS      RESTARTS   AGE
@@ -235,7 +236,7 @@ oci streaming stream message put \
   --endpoint https://rdz33fyp7etq.streaming.us-ashburn-1.oci.oraclecloud.com 
 ```
 
-Save the script as send_event.sh. Add executable permission to the script and run it
+Save the script as send_event.sh. Add executable permission to the script and run it:
 ```text
 chmod +x send_event.sh
 ./send_event.sh  <JSON file name>
@@ -261,7 +262,7 @@ NAME                                 SCHEDULE      TIMEZONE   SUSPEND   ACTIVE  
 scheduled-drain-10.0.10.109-011213   45 2 10 2 *   <none>     False     0        <none>          2m35s
 ```
 
-Monitor the running job. 15 min before the maintenance time you should see the drain job running
+Monitor the running job. 15 min before the maintenance time you should see the drain job running:
 ```text
 kubectl -n wd get jobs --watch
 NAME                                          STATUS     COMPLETIONS   DURATION   AGE
@@ -280,7 +281,7 @@ kubectl get pods --all-namespaces --field-selector spec.nodeName='10.0.10.109' |
 NAMESPACE     NAME                      READY   STATUS    RESTARTS   AGE
 ```
 
-To check that the node is uncordoned after node maintenance ends, repeat this step with **Event Type** set to **Instance Maintenance Event - End**. After sending this event using send_event.sh script the node must be uncordoned.
+To check that the node is uncordoned after node maintenance ends, repeat this step with **Event Type** set to **Instance Maintenance Event - End**. After sending this event using send_event.sh script the node must be uncordoned:
 ```text
 kubectl get nodes
 NAME          STATUS                     ROLES   AGE   VERSION
