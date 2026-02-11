@@ -155,7 +155,7 @@ Edit wd.yaml file and replace image repo with your registry
 image: <region-code>.ocir.co/<tenancy-namespace>/wd/watchdog:1.0
 ```
 
-*Note: If you are using a private container registry, insure that the secret name matches the secret that you created to pull the image.
+*Note: If you are using a private container registry, insure that the secret name matches the secret that you created to pull the image.*
 
 Deploy Watchdog container
 ```text
