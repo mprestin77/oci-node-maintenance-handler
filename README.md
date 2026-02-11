@@ -93,7 +93,7 @@ docker login -u '<tenancy-namespace>/<domain-name>/<user-name>' iad.ocir.io
 Enter password and check that it returns **Login Succeeded**.
 
 #### Build Watchdog Container Image
-To build **Watchdog** container image go to the directory where you copied the files and run the following command
+To build **Watchdog** container image go to the directory where you cloned the files and run the following command
 ```text
 docker build -t watchdog:1.0 .
 ```
