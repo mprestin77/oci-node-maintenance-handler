@@ -85,7 +85,7 @@ It should create a "oci-node-maintenance-handler" directory with the files clone
 If you are planning to store ONMH container image in OCI Container Registry (OCIR), create a repo in the region you are going to use. Here is a list of [OCI Registry endpoints per region](https://docs.oracle.com/en-us/iaas/Content/Registry/Concepts/registryprerequisites.htm)
 Generate Auth Token and log into the Registry using the Auth Token as your password as described in [Logging OCI Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm). As an example I am using 'iad' for us-ashburn-1 region
 ```text
-docker login -u '<tenancy-namespace>/<domain-name>/<user-name>' iad.ocir.io
+docker login -u '<tenancy-namespace>/<identity-domain-name>/<user-name>' iad.ocir.io
 ```
 where tenancy-namespace is your OCI [tenancy object storage namespace](https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/understandingnamespaces.htm). Enter password and check that it returns **Login Succeeded**.
 
@@ -102,7 +102,7 @@ watchdog:1.0                                     c33d8a46f682        873MB      
 ```
 If you are using OCI Container Registry push the container image to OCIR. Tag the image using docker command:
 ```text
-docker push <registry-domain>/<tenancy-namespace>/<repo-name>:<version>
+docker push <registry-code>/<tenancy-namespace>/<repo-name>:<version>
 ```
 For example, to push the image to OCIR in us-ashburn-1 region use the following command:
 ```text
