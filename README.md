@@ -105,13 +105,13 @@ watchdog:1.0                                     c33d8a46f682        873MB      
 ```
 If you are using OCI Registry push to the image to OCIR. Tag the image using docker command:
 ```text
-docker push <registry-domain>/<tenancy-object-storage-namespace>/<repo-name>:<version>
+docker push <registry-domain>/<tenancy-namespace>/<repo-name>:<version>
 ```
 For example, to push the image to OCIR in us-ashburn-1 region use the following command:
 ```text
-docker push iad.ocir.io/<tenancy-object-storage-namespace>/wd/watchdog:1.0
+docker push iad.ocir.io/<tenancy-namespace>/wd/watchdog:1.0
 ```
-where tenancy-object-storage-namespace is your OCI [tenancy Object Storage namespace](https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/understandingnamespaces.htm) 
+where tenancy-namespace is your OCI [tenancy object storage namespace](https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/understandingnamespaces.htm) 
 
 If you encounter any errors refer to [Pushing Images using Docker CLI](https://docs.oracle.com/en-us/iaas/Content/Registry/Tasks/registrypushingimagesusingthedockercli.htm). 
 
