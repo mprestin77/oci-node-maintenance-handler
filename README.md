@@ -68,45 +68,41 @@ Under Actions set **Action Type** to **Streaming**, set **Compartment** to the s
 ### 4. Deploy to OKE
 
 #### Install Prerequsites  
-
-Install and start Docker Engine following Docker [documentation](https://docs.docker.com/engine/install/)
- 
-Install kubectl following Kubernetes [documenentation](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/).
-
-Install [OCI CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#InstallingCLI) and [set up the configuration file](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile) it 
-
-Setup Kubernetes cluster access following OCI OKE [documentation](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#)
+*   **Docker Engine:** [Install and start Docker](https://docs.docker.com) to build and run the handler image.
+*   **kubectl:** [Install the Kubernetes CLI](https://kubernetes.io) to manage cluster resources.
+*   **OCI CLI:** [Install and configure the OCI CLI](https://docs.oracle.com) with a valid configuration file for cluster access and local testing.
+*   **OKE Cluster Access:** Ensure you have [configured cluster access](https://docs.oracle.com) via your `kubeconfig` file.
 
 #### Copy Files from Github
-Install [git](https://github.com/git-guides/install-git) and clone github files to your local machine or OCI staging VM
+Install [git](https://github.com/git-guides/install-git) and clone the repository to your local machine or OCI staging VM:
 ```text
 git clone https://github.com/mprestin77/oci-node-maintenance-handler.git
 ```
-It should create a "oci-node-maintenance-handler" directory with the files cloned from the github
+This command creates a directory named oci-node-maintenance-handler containing the source files. After cloning, navigate into the new directory to begin the setup.
 
-#### Login to OCI Registry
+#### Login to OCI Container Registry
 
-If you are planning to store ONMH container image in OCI Registry (OCIR), create a repo in the region you are going to use. Here is a list of [OCI Registry endpoints per region](https://docs.oracle.com/en-us/iaas/Content/Registry/Concepts/registryprerequisites.htm)
+If you are planning to store ONMH container image in OCI Container Registry (OCIR), create a repo in the region you are going to use. Here is a list of [OCI Registry endpoints per region](https://docs.oracle.com/en-us/iaas/Content/Registry/Concepts/registryprerequisites.htm)
 Generate Auth Token and log into the Registry using the Auth Token as your password as described in [Logging OCI Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm). As an example I am using 'iad' for us-ashburn-1 region
 ```text
-docker login -u '<tenancy-namespace>/<domain-name>/<user-name>' iad.ocir.io
+docker login -u '<tenancy-namespace>/<identity-domain-name>/<user-name>' iad.ocir.io
 ```
 where tenancy-namespace is your OCI [tenancy object storage namespace](https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/understandingnamespaces.htm). Enter password and check that it returns **Login Succeeded**.
 
 #### Build Watchdog Container Image
-To build **Watchdog** container image go to the directory where you cloned the files and run the following command
+To build **Watchdog** container image go to the directory where you cloned the files and run the following command:
 ```text
 docker build -t watchdog:1.0 .
 ```
-Make sure that the container image is successfully created, and check that with 'docker images' command
+Make sure that the container image is successfully created, and check that with 'docker images' command:
 ```text
 docker images
 IMAGE                                            ID             DISK USAGE   CONTENT SIZE   EXTRA      
 watchdog:1.0                                     c33d8a46f682        873MB          146MB       
 ```
-If you are using OCI Registry push to the image to OCIR. Tag the image using docker command:
+If you are using OCI Container Registry push the container image to OCIR. Tag the image using docker command:
 ```text
-docker push <registry-domain>/<tenancy-namespace>/<repo-name>:<version>
+docker push <registry-code>/<tenancy-namespace>/<repo-name>:<version>
 ```
 For example, to push the image to OCIR in us-ashburn-1 region use the following command:
 ```text
@@ -117,13 +113,13 @@ where tenancy-namespace is your OCI [tenancy object storage namespace](https://d
 *Note: This example shows how to push images to OCIR, but if you prefer using a different container registry push the image to the registry you want to use.*
  
 #### Create Namespace
-Create a Kubernetes namespace used by ONMH containers  
+Create a Kubernetes namespace used by ONMH containers: 
 ```text
 kubectl create namespace wd
 ```
 
 #### Create Config Map
-Edit config.map file and set the following environment variables
+Edit config.map file and set the following environment variables:
 ```text
 WD_STREAM_ID	         OCID of your OCI Stream.
 WD_STREAM_ENDPOINT	   Your Messages Endpoint URL.
@@ -131,33 +127,43 @@ WD_NODEPOOL             OKE nodepool name
 WD_NAMESPACE            Kubernetes namespace used by ONMH jobs (e.g. `wd`) 
 ```
 
-Create the config map
+Create the config map:
 ```text
 kubectl -n wd apply -f config.map
 ```
 
 #### Apply RBAC
+Create Kubernetes RBAC role and sevice account:
 ```text
 kubectl -n wd apply -f rbac.yaml
 ```
 
+#### Create Image Pull Secret
+If you store the ONMH image in a private OCI Container Registry (OCIR), you must create a secret so Kubernetes can pull the image:
+
+```bash
+kubectl create secret docker-registry ocirsecret \
+  -n wd \
+  --docker-server=<region-code>.ocir.io \
+  --docker-username='<tenancy-namespace>/<username>' \
+  --docker-password='<auth-token>' \
+  --docker-email='<email-address>'
+```
+  
 #### Deploy a Watchdog Container
-Edit wd.yaml file and replace image repo with your registry  
+Edit wd.yaml file and replace image repo with your registry:  
 ```text
-image: <registry-domain>/<tenancy-namespace>/wd/watchdog:1.0
+image: <region-code>.ocir.co/<tenancy-namespace>/wd/watchdog:1.0
 ```
 
-If you are using OCIR registry create an [OCIR secret](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengpullingimagesfromocir.htm)
-```text
-kubectl -n wd --namespace test create secret docker-registry ocirsecret --docker-server=iad.ocir.io --docker-username='<tenancy-namespace>/<user-account>' --docker-password=‘authentication-token' --docker-email='<email>'
-```
+*Note: If you are using a private container registry, insure that the secret name matches the secret that you created to pull the image.*
 
-Deploy Watchdog container
+Deploy Watchdog container:
 ```text
 kubectl -n wd apply -f wd.yaml
 ```
 
-To check that Watchdog container is running
+To check that Watchdog container is running:
 ```text
 kubectl -n wd get pods
 NAME                                                READY   STATUS      RESTARTS   AGE
@@ -223,14 +229,14 @@ Create a shell script using OCI CLI:
 # Encode the file 'event.json' into a variable
 ENCODED_JSON=$(base64 -w 0 $1)
 
-# Use it in the CLI command
+# Use it in the CLI command:
 oci streaming stream message put \
   --stream-id ocid1.stream.oc1.iad.amaaaaaa22cz7wqar4hixoqhpcmddok5wor2txxbisu7h3iwrrlwpi5tcq3a \
   --messages '[{"key": "bWFpbnRlbmFuY2U=", "value": "'$ENCODED_JSON'"}]' \
   --endpoint https://rdz33fyp7etq.streaming.us-ashburn-1.oci.oraclecloud.com 
 ```
 
-Save the script as send_event.sh. Add executable permission to the script and run it
+Save the script as send_event.sh. Add executable permission to the script and run it:
 ```text
 chmod +x send_event.sh
 ./send_event.sh  <JSON file name>
@@ -256,7 +262,7 @@ NAME                                 SCHEDULE      TIMEZONE   SUSPEND   ACTIVE  
 scheduled-drain-10.0.10.109-011213   45 2 10 2 *   <none>     False     0        <none>          2m35s
 ```
 
-Monitor the running job. 15 min before the maintenance time you should see the drain job running
+Monitor the running job. 15 min before the maintenance time you should see the drain job running:
 ```text
 kubectl -n wd get jobs --watch
 NAME                                          STATUS     COMPLETIONS   DURATION   AGE
@@ -275,7 +281,7 @@ kubectl get pods --all-namespaces --field-selector spec.nodeName='10.0.10.109' |
 NAMESPACE     NAME                      READY   STATUS    RESTARTS   AGE
 ```
 
-To check that the node is uncordoned after node maintenance ends, repeat this step with **Event Type** set to **Instance Maintenance Event - End**. After sending this event using send_event.sh script the node must be uncordoned.
+To check that the node is uncordoned after node maintenance ends, repeat this step with **Event Type** set to **Instance Maintenance Event - End**. After sending this event using send_event.sh script the node must be uncordoned:
 ```text
 kubectl get nodes
 NAME          STATUS                     ROLES   AGE   VERSION
