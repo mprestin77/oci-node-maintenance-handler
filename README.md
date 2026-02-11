@@ -80,9 +80,9 @@ git clone https://github.com/mprestin77/oci-node-maintenance-handler.git
 ```
 It should create a "oci-node-maintenance-handler" directory with the files cloned from the github
 
-#### Login to OCI Registry
+#### Login to OCI Container Registry
 
-If you are planning to store ONMH container image in OCI Registry (OCIR), create a repo in the region you are going to use. Here is a list of [OCI Registry endpoints per region](https://docs.oracle.com/en-us/iaas/Content/Registry/Concepts/registryprerequisites.htm)
+If you are planning to store ONMH container image in OCI Container Registry (OCIR), create a repo in the region you are going to use. Here is a list of [OCI Registry endpoints per region](https://docs.oracle.com/en-us/iaas/Content/Registry/Concepts/registryprerequisites.htm)
 Generate Auth Token and log into the Registry using the Auth Token as your password as described in [Logging OCI Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm). As an example I am using 'iad' for us-ashburn-1 region
 ```text
 docker login -u '<tenancy-namespace>/<domain-name>/<user-name>' iad.ocir.io
@@ -100,7 +100,7 @@ docker images
 IMAGE                                            ID             DISK USAGE   CONTENT SIZE   EXTRA      
 watchdog:1.0                                     c33d8a46f682        873MB          146MB       
 ```
-If you are using OCI Registry push the container image to OCIR. Tag the image using docker command:
+If you are using OCI Container Registry push the container image to OCIR. Tag the image using docker command:
 ```text
 docker push <registry-domain>/<tenancy-namespace>/<repo-name>:<version>
 ```
@@ -137,19 +137,23 @@ kubectl -n wd apply -f config.map
 kubectl -n wd apply -f rbac.yaml
 ```
 
-#### Create Secret
-If you store ONMH image in OCI Registry create an [OCIR secret](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengpullingimagesfromocir.htm)
-```text
-kubectl -n wd --namespace test create secret docker-registry ocirsecret --docker-server=iad.ocir.io --docker-username='<tenancy-namespace>/<user-account>' --docker-password=‘authentication-token' --docker-email='<email>'
-```
+#### Create Image Pull Secret
+If you store the ONMH image in a private OCI Container Registry (OCIR), you must create a secret so Kubernetes can pull the image:
 
+```bash
+kubectl create secret docker-registry ocirsecret \
+  -n wd \
+  --docker-server=<region-code>.ocir.io \
+  --docker-username='<tenancy-namespace>/<username>' \
+  --docker-password='<auth-token>' \
+  --docker-email='<email-address>'
+```
+  
 #### Deploy a Watchdog Container
 Edit wd.yaml file and replace image repo with your registry  
 ```text
 image: <registry-domain>/<tenancy-namespace>/wd/watchdog:1.0
 ```
-
-
 
 Deploy Watchdog container
 ```text
