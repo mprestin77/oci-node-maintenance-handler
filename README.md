@@ -73,7 +73,7 @@ Install and start Docker Engine following Docker [documentation](https://docs.do
  
 Install kubectl following Kubernetes [documenentation](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/).
 
-Install [OCI CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#InstallingCLI) and [set up the configuration file](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile) it 
+Install [OCI CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#InstallingCLI) and [set up the configuration file](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile).
 
 Setup Kubernetes cluster access following OCI OKE [documentation](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#)
 
