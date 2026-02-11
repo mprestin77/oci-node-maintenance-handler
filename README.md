@@ -111,9 +111,7 @@ For example, to push the image to OCIR in us-ashburn-1 region use the following 
 ```text
 docker push iad.ocir.io/<tenancy-namespace>/wd/watchdog:1.0
 ```
-where tenancy-namespace is your OCI [tenancy object storage namespace](https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/understandingnamespaces.htm) 
-
-If you encounter any errors refer to [Pushing Images using Docker CLI](https://docs.oracle.com/en-us/iaas/Content/Registry/Tasks/registrypushingimagesusingthedockercli.htm). 
+where tenancy-namespace is your OCI [tenancy object storage namespace](https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/understandingnamespaces.htm). If you encounter any errors refer to [Pushing Images using Docker CLI](https://docs.oracle.com/en-us/iaas/Content/Registry/Tasks/registrypushingimagesusingthedockercli.htm). 
 
 *Note: This example shows how to push images to OCIR, but if you prefer using a different container registry push the image to the registry you want to use.*
  
