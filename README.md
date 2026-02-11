@@ -77,7 +77,7 @@ Install [OCI CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinst
 Setup Kubernetes cluster access following OCI OKE [documentation](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#)
 
 #### Copy Files from Github
-Install git and clone github files to your local machine or OCI staging VM
+Install [git](https://github.com/git-guides/install-git) and clone github files to your local machine or OCI staging VM
 ```text
 git clone https://github.com/mprestin77/oci-node-maintenance-handler.git
 ```
