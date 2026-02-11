@@ -152,8 +152,10 @@ kubectl create secret docker-registry ocirsecret \
 #### Deploy a Watchdog Container
 Edit wd.yaml file and replace image repo with your registry  
 ```text
-image: <registry-domain>/<tenancy-namespace>/wd/watchdog:1.0
+image: <region-code>.ocir.co/<tenancy-namespace>/wd/watchdog:1.0
 ```
+
+*Note: If you are using a private container registry, insure that the secret name matches the secret that you created to pull the image.
 
 Deploy Watchdog container
 ```text
