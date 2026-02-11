@@ -90,7 +90,7 @@ Generate Auth Token and log into the Registry using the Auth Token as your passw
 ```text
 docker login -u '<tenancy-namespace>/<domain-name>/<user-name>' iad.ocir.io
 ```
-Enter password and check that it returns **Login Succeeded**.
+where tenancy-namespace is your OCI [tenancy object storage namespace](https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/understandingnamespaces.htm). Enter password and check that it returns **Login Succeeded**.
 
 #### Build Watchdog Container Image
 To build **Watchdog** container image go to the directory where you cloned the files and run the following command
@@ -141,6 +141,14 @@ kubectl -n wd apply -f rbac.yaml
 ```
 
 #### Deploy a Watchdog Container
+Edit wd.yaml file and replace image repo with your registry  
+```text
+image: <registry-domain>/<tenancy-namespace>/wd/watchdog:1.0
+```
+
+If you are using OCIR registry create a secret
+kubectl --namespace test create secret docker-registry ocirsecret --docker-server=iad.ocir.io --docker-username='<tenancy-namespace>/<user-account>' --docker-password=‘authentication-token' --docker-email='<email>'
+
 ```text
 kubectl -n wd apply -f wd.yaml
 ```
