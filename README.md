@@ -66,37 +66,64 @@ Under Actions set **Action Type** to **Streaming**, set **Compartment** to the s
 
 ### 4. Deploy to OKE
 
-# Install Docker and Kubectl  
+#### Install Prerequsites  
 
-Install docker following docker [documentation](https://docs.docker.com/engine/install/)
-
-Start Docker sevice
-```text
-sudo systemctl enable docker
-sudo systemctl start docker
-```
-Enable docker without sudo for your user account
-```text
-sudo usermod -a -G docker <username>
-```
-Logout and login back to your account. Now you should be able to run docker command without sudo.
+Install and start Docker Engine following Docker [documentation](https://docs.docker.com/engine/install/)
  
-Install kubectl following Kubernetes [documenentation](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/). 
+Install kubectl following Kubernetes [documenentation](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/).
 
-# Download OKE cluster kube config
+Install [OCI CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#InstallingCLI) and [set up the configuration file](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile) it 
 
-```test
-mkdir -p $HOME/.kube
-oci ce cluster create-kubeconfig --cluster-id 'cluster-OCID' --file $HOME/.kube/config --region 'region name' --token-version 2.0.0 --kube-endpoint PRIVATE_ENDPOINT
-export KUBECONFIG=$HOME/.kube/config
+Setup Kubernetes cluster access following OCI OKE [documentation](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#)
+
+#### Copy Files from Github
+Install git and clone github files to your local machine or OCI staging VM
+```text
+git clone https://github.com/mprestin77/oci-node-maintenance-handler.git
 ```
+It should create a "oci-node-maintenance-handler" directory with the files cloned from the github
 
-#### Create namespace
+#### Login to OCI Registry
+
+If you are planning to store ONMH container image in OCI Registry (OCIR), create a repo in the region you are going to use. Here is a list of [OCI Registry endpoints per region](https://docs.oracle.com/en-us/iaas/Content/Registry/Concepts/registryprerequisites.htm)
+Generate Auth Token and log into the Registry using the Auth Token as your password as described in [Logging OCI Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm). As an example I am using 'iad' for us-ashburn-1 region
+```text
+docker login -u '<tenancy-namespace>/<domain-name>/<user-name>' iad.ocir.io
+```
+Enter password and check that it returns **Login Succeeded**.
+
+#### Build Watchdog Container Image
+To build **Watchdog** container image go to the directory where you copied the files and run the following command
+```text
+docker build -t watchdog:1.0 .
+```
+Make sure that the container image is successfully created, and check that with 'docker images' command
+```text
+docker images
+IMAGE                                            ID             DISK USAGE   CONTENT SIZE   EXTRA      
+watchdog:1.0                                     c33d8a46f682        873MB          146MB       
+```
+If you are using OCI Registry push to the image to OCIR. Tag the image using docker command:
+```text
+docker push <registry-domain>/<tenancy-object-storage-namespace>/<repo-name>:<version>
+```
+For example, to push the image to OCIR in us-ashburn-1 region use the following command:
+```text
+docker push iad.ocir.io/<tenancy-object-storage-namespace>/wd/watchdog:1.0
+```
+where tenancy-object-storage-namespace is your OCI [tenancy Object Storage namespace](https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/understandingnamespaces.htm) 
+
+If you encounter any errors refer to [Pushing Images using Docker CLI](https://docs.oracle.com/en-us/iaas/Content/Registry/Tasks/registrypushingimagesusingthedockercli.htm). 
+
+*Note: This example shows how to push images to OCIR, but if you prefer using a different container registry push the image to the registry you want to use.*
+ 
+#### Create Namespace
+Create a Kubernetes namespace used by ONMH containers  
 ```text
 kubectl create namespace wd
 ```
 
-#### Create config map
+#### Create Config Map
 Edit config.map file and set the following environment variables
 ```text
 WD_STREAM_ID	         OCID of your OCI Stream.
@@ -115,7 +142,7 @@ kubectl -n wd apply -f config.map
 kubectl -n wd apply -f rbac.yaml
 ```
 
-#### Deploy Watchdog
+#### Deploy a Watchdog Container
 ```text
 kubectl -n wd apply -f wd.yaml
 ```
@@ -131,7 +158,7 @@ If the status is not "Running" get the pod logs to see the error, for example:
 kubectl -n wd describe pod wd-6bdbb448ff-h54ln
 ```
 
-#### Verify that ONMH is working
+#### Verify that ONMH is Working
 Go to **Observability & Management** > **Events Service** > **Rules**. Open the event rule that you created and click on "View example events (JSON). In **Event Type** select **Instance Maintenance Event - Scheduled**.
 it shows event JSON, for example:
 ```text
