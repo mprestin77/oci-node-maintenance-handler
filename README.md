@@ -70,7 +70,7 @@ Under Actions set **Action Type** to **Streaming**, set **Compartment** to the s
 #### Install Prerequsites  
 *   **Docker Engine:** [Install and start Docker](https://docs.docker.com) to build and run the handler image.
 *   **kubectl:** [Install the Kubernetes CLI](https://kubernetes.io) to manage cluster resources.
-*   **OCI CLI:** [Install and configure the OCI CLI](https://docs.oracle.com) with a valid configuration file.
+*   **OCI CLI:** [Install and configure the OCI CLI](https://docs.oracle.com) with a valid configuration file for cluster access and local testing.
 *   **OKE Cluster Access:** Ensure you have [configured cluster access](https://docs.oracle.com) via your `kubeconfig` file.
 
 #### Copy Files from Github
@@ -100,7 +100,7 @@ docker images
 IMAGE                                            ID             DISK USAGE   CONTENT SIZE   EXTRA      
 watchdog:1.0                                     c33d8a46f682        873MB          146MB       
 ```
-If you are using OCI Registry push to the image to OCIR. Tag the image using docker command:
+If you are using OCI Registry push the container image to OCIR. Tag the image using docker command:
 ```text
 docker push <registry-domain>/<tenancy-namespace>/<repo-name>:<version>
 ```
@@ -137,16 +137,19 @@ kubectl -n wd apply -f config.map
 kubectl -n wd apply -f rbac.yaml
 ```
 
+#### Create Secret
+If you store ONMH image in OCI Registry create an [OCIR secret](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengpullingimagesfromocir.htm)
+```text
+kubectl -n wd --namespace test create secret docker-registry ocirsecret --docker-server=iad.ocir.io --docker-username='<tenancy-namespace>/<user-account>' --docker-password=‘authentication-token' --docker-email='<email>'
+```
+
 #### Deploy a Watchdog Container
 Edit wd.yaml file and replace image repo with your registry  
 ```text
 image: <registry-domain>/<tenancy-namespace>/wd/watchdog:1.0
 ```
 
-If you are using OCIR registry create an [OCIR secret](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengpullingimagesfromocir.htm)
-```text
-kubectl -n wd --namespace test create secret docker-registry ocirsecret --docker-server=iad.ocir.io --docker-username='<tenancy-namespace>/<user-account>' --docker-password=‘authentication-token' --docker-email='<email>'
-```
+
 
 Deploy Watchdog container
 ```text
