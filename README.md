@@ -68,14 +68,10 @@ Under Actions set **Action Type** to **Streaming**, set **Compartment** to the s
 ### 4. Deploy to OKE
 
 #### Install Prerequsites  
-
-Install and start Docker Engine following Docker [documentation](https://docs.docker.com/engine/install/)
- 
-Install kubectl following Kubernetes [documenentation](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/).
-
-Install [OCI CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#InstallingCLI) and [set up the configuration file](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#configfile).
-
-Setup Kubernetes cluster access following OCI OKE [documentation](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#)
+*   **Docker Engine:** [Install and start Docker](https://docs.docker.com) to build and run the handler image.
+*   **kubectl:** [Install the Kubernetes CLI](https://kubernetes.io) to manage cluster resources.
+*   **OCI CLI:** [Install and configure the OCI CLI](https://docs.oracle.com) with a valid configuration file.
+*   **OKE Cluster Access:** Ensure you have [configured cluster access](https://docs.oracle.com) via your `kubeconfig` file.
 
 #### Copy Files from Github
 Install [git](https://github.com/git-guides/install-git) and clone github files to your local machine or OCI staging VM
