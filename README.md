@@ -146,11 +146,12 @@ Edit wd.yaml file and replace image repo with your registry
 image: <registry-domain>/<tenancy-namespace>/wd/watchdog:1.0
 ```
 
-If you are using OCIR registry create a secret
+If you are using OCIR registry create an [OCIR secret](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengpullingimagesfromocir.htm)
 ```text
 kubectl -n wd --namespace test create secret docker-registry ocirsecret --docker-server=iad.ocir.io --docker-username='<tenancy-namespace>/<user-account>' --docker-password=‘authentication-token' --docker-email='<email>'
 ```
 
+Deploy Watchdog container
 ```text
 kubectl -n wd apply -f wd.yaml
 ```
