@@ -49,7 +49,7 @@ Any {instance.compartment.id = 'ocid1.compartment.oc1..example'}
 Policy for the Dynamic Group:
 ```text
 Allow dynamic-group <Group_Name> to use stream-family in compartment <Compartment_Name>
-Allow dynamic-group <Group_Name> to inspect instances in compartment <Compartment_Name>
+Allow dynamic-group <Group_Name> to read instances in compartment <Compartment_Name>
 ```
 
 ### 3. Create OCI Event Rule
@@ -92,8 +92,10 @@ where tenancy-namespace is your OCI [tenancy object storage namespace](https://d
 #### Build Watchdog Container Image
 To build **Watchdog** container image go to the directory where you cloned the files and run the following command:
 ```text
-docker build -t watchdog:1.0 .
+docker build --platform linux/amd64 -t watchdog:1.0 .
 ```
+*Note: If you are going to run ONMH containers on ARM nodes use --platform linux/arm64* 
+
 Make sure that the container image is successfully created, and check that with 'docker images' command:
 ```text
 docker images
