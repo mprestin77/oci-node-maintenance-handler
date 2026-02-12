@@ -234,7 +234,7 @@ Set **compartmentId** to your compartment OCID, **instanceId** to your instance 
 Create a shell script using OCI CLI:
 ```text
 # Encode the file 'event.json' into a variable
-ENCODED_JSON=$(base64 -w 0 $1)
+ENCODED_JSON=$(base64 -w 0 -i $1)
 
 # Use it in the CLI command and replace <stream OCID> and <stream endpoint> with your OCI stream OCID and endpoint:
 oci streaming stream message put \
