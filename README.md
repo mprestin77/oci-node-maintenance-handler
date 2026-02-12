@@ -234,7 +234,7 @@ Create a shell script using OCI CLI:
 # Encode the file 'event.json' into a variable
 ENCODED_JSON=$(base64 -w 0 $1)
 
-# Use it in the CLI command:
+# Use it in the CLI command and replace <stream OCID> and <stream endpoint> with your OCI stream OCID and endpoint values:
 oci streaming stream message put \
   --stream-id <stream OCID> \
   --messages '[{"key": "bWFpbnRlbmFuY2U=", "value": "'$ENCODED_JSON'"}]' \
