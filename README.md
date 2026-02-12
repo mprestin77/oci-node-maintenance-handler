@@ -141,7 +141,7 @@ kubectl -n wd apply -f rbac.yaml
 If you store the ONMH image in a private OCI Container Registry (OCIR), you must create a secret so Kubernetes can pull the image:
 
 ```bash
-kubectl create secret docker-registry ocirsecret \
+kubectl create secret docker-registry ocir-secret \
   -n wd \
   --docker-server=<region-code>.ocir.io \
   --docker-username='<tenancy-namespace>/<username>' \
