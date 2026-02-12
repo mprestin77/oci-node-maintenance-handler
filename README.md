@@ -160,7 +160,7 @@ image: <region-code>.ocir.co/<tenancy-namespace>/wd/watchdog:1.0
 Update the nodeSelector in the deployment manifest to specify the node pool where maintenance jobs will be executed. It is highly recommended to use a dedicated node pool for these jobs to ensure the drain process is not interrupted by the maintenance of the node it is running on.
 ```text
 nodeSelector:
-   name: <your nodepool name>
+   name: <your-nodepool-name>
 ```
 Deploy Watchdog container:
 ```text
