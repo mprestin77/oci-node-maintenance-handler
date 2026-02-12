@@ -18,7 +18,7 @@ spec:
       serviceAccountName: wd-service
       containers:
       - name: "watchdog"
-        image: iad.ocir.io/axhlyht8myu1/mikep/wd/watchdog:1.0
+        image: <region-code>.ocir.co/<tenancy-namespace>/wd/watchdog:1.0
         imagePullPolicy: Always
         envFrom:
         - configMapRef:
@@ -27,5 +27,5 @@ spec:
       imagePullSecrets:
         - name: ocir-secret
       nodeSelector:
-        name: wd-nodepool
+        name: <your-nodepool-name>
 
