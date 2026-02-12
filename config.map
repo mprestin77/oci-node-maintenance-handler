@@ -4,7 +4,7 @@ metadata:
   name: "wd"
   namespace: wd
 data:
-  WD_STREAM_ENDPOINT: "https://rdz33fyp7etq.streaming.us-ashburn-1.oci.oraclecloud.com"
-  WD_STREAM_OCID: "ocid1.stream.oc1.iad.amaaaaaa22cz7wqar4hixoqhpcmddok5wor2txxbisu7h3iwrrlwpi5tcq3a"
-  WD_NODEPOOL: "wd-nodepool"
-  WD_NAMESPACE: "wd"
+  WD_STREAM_ID	         "<OCID of your OCI Stream>"
+  WD_STREAM_ENDPOINT	 "<Messages Endpoint URL>".
+  WD_NODEPOOL            "<OKE nodepool name>"
+  WD_NAMESPACE           "<Kubernetes namespace used by ONMH jobs>" 

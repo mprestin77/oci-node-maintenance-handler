@@ -118,7 +118,7 @@ def create_drain_job(hostname, m_start=None):
        )
        # Create the Job in the namespace
        try:
-          api_response = batch_v1.create_namespaced_job(namespace="wd", body=job)
+          api_response = batch_v1.create_namespaced_job(namespace=namespace, body=job)
           print("Job created. status='%s'" % str(api_response.status), flush=True)
           return api_response
        except Exception as e:
@@ -171,7 +171,7 @@ def create_uncordon_job(hostname):
         )
     )
     try:
-       api_response = batch_v1.create_namespaced_job(namespace="wd", body=job)
+       api_response = batch_v1.create_namespaced_job(namespace=namespace, body=job)
        print("Job created. status='%s'" % str(api_response.status), flush=True)
        return api_response
     except Exception as e:
