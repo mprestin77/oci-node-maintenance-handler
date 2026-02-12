@@ -123,10 +123,8 @@ Edit config.map file and set the following environment variables:
 ```text
 WD_STREAM_ID	        "OCID of your OCI Stream"
 WD_STREAM_ENDPOINT	    "Messages Endpoint URL"
-WD_NODEPOOL             "OKE nodepool name"
-WD_NAMESPACE            "Kubernetes namespace used by ONMH jobs" 
+WD_NODEPOOL             "OKE nodepool name" 
 ```
-*Note: Kubernetes namespace must match the name of the namespace you created in [the previous step](https://github.com/mprestin77/oci-node-maintenance-handler?tab=readme-ov-file#create-namespace).*
 
 Create the config map:
 ```text
