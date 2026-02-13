@@ -249,7 +249,7 @@ Save the script as send_event.sh. Add executable permission to the script and ru
 chmod +x send_event.sh
 ./send_event.sh  <JSON file name>
 ```
-*Note: If in [Setup OCI Streaming](https://github.com/mprestin77/oci-node-maintenance-handler/blob/master/README.md#1-setup-oci-streaming) you created a stream with a **private endpoint**, and you don't have access to this subnet from your machine (to ingress port tcp/443), you can send a test message with a copy of the event JSON file directly from OCI Console as explained in [Publishing a Test Message to a Stream](https://docs.oracle.com/en-us/iaas/Content/Streaming/Tasks/publishingmessages.htm).
+*Note: If in [Setup OCI Streaming](https://github.com/mprestin77/oci-node-maintenance-handler/blob/master/README.md#1-setup-oci-streaming) you created a stream with a **private endpoint**, and you don't have access to this subnet from your machine (to ingress port tcp/443), you can send a test message with a copy of the event JSON file directly from OCI Console as explained in [Publishing a Test Message to a Stream](https://docs.oracle.com/en-us/iaas/Content/Streaming/Tasks/publishingmessages.htm).*
 
 Check Watchdog logs:
 ```test
