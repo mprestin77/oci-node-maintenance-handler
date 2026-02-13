@@ -38,6 +38,8 @@ Create a Stream to act as the message bus:
 3. Create a **Stream** named `node-maintenance-stream`.
 4. Note the **Messages Endpoint** and **Stream OCID**.
 
+*Note: Streams support both public and private endpoints. For private endpoints, attach the stream to the cluster Pod Subnet and allow inbound TCP/443 in the security list or NSG*  
+
 ### 2. Configure IAM Policies
 Create a [dynamic group](https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingdynamicgroups.htm) containing your OKE worker nodes:
 
