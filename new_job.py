@@ -38,7 +38,7 @@ def create_drain_job(hostname, m_start=None):
     namespace = os.environ.get('WD_NAMESPACE', 'default')
     # Configure k8s jobs parameters
     ttl_seconds_after_finished = os.environ.get('WD_TTL_SECONDS_AFTER_FINISHED',3600)
-    backoff_limit = = os.environ.get('WD_BACKOFF_LIMIT',6)
+    backoff_limit = os.environ.get('WD_BACKOFF_LIMIT',6)
 
     now = datetime.now(timezone.utc)
     # Set time zone in the cronjob time
