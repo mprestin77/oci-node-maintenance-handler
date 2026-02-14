@@ -38,6 +38,8 @@ Create a Stream to act as the message bus:
 3. Create a **Stream** named `node-maintenance-stream`.
 4. Note the **Messages Endpoint** and **Stream OCID**.
 
+*Note: Streams support both public and private endpoints. For private endpoints, attach the stream to the cluster Pod Subnet and allow inbound TCP/443 in the security list or NSG*  
+
 ### 2. Configure IAM Policies
 Create a [dynamic group](https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingdynamicgroups.htm) containing your OKE worker nodes:
 
@@ -49,7 +51,7 @@ Any {instance.compartment.id = 'ocid1.compartment.oc1..example'}
 Policy for the Dynamic Group:
 ```text
 Allow dynamic-group <Group_Name> to use stream-family in compartment <Compartment_Name>
-Allow dynamic-group <Group_Name> to inspect instances in compartment <Compartment_Name>
+Allow dynamic-group <Group_Name> to read instances in compartment <Compartment_Name>
 ```
 
 ### 3. Create OCI Event Rule
@@ -92,8 +94,10 @@ where tenancy-namespace is your OCI [tenancy object storage namespace](https://d
 #### Build Watchdog Container Image
 To build **Watchdog** container image go to the directory where you cloned the files and run the following command:
 ```text
-docker build -t watchdog:1.0 .
+docker build --platform linux/amd64 -t watchdog:1.0 .
 ```
+*Note: If you are going to run ONMH containers on ARM nodes use --platform linux/arm64* 
+
 Make sure that the container image is successfully created, and check that with 'docker images' command:
 ```text
 docker images
@@ -141,7 +145,7 @@ kubectl -n wd apply -f rbac.yaml
 If you store the ONMH image in a private OCI Container Registry (OCIR), you must create a secret so Kubernetes can pull the image:
 
 ```bash
-kubectl create secret docker-registry ocirsecret \
+kubectl create secret docker-registry ocir-secret \
   -n wd \
   --docker-server=<region-code>.ocir.io \
   --docker-username='<tenancy-namespace>/<username>' \
@@ -232,20 +236,20 @@ Set **compartmentId** to your compartment OCID, **instanceId** to your instance 
 Create a shell script using OCI CLI:
 ```text
 # Encode the file 'event.json' into a variable
-ENCODED_JSON=$(base64 -w 0 $1)
+ENCODED_JSON=$(base64 -w 0 -i $1)
 
-# Use it in the CLI command:
+# Use it in the CLI command and replace <stream OCID> and <stream endpoint> with your OCI stream OCID and endpoint:
 oci streaming stream message put \
   --stream-id <stream OCID> \
   --messages '[{"key": "bWFpbnRlbmFuY2U=", "value": "'$ENCODED_JSON'"}]' \
   --endpoint <stream endpoint>
 ```
-
 Save the script as send_event.sh. Add executable permission to the script and run it:
 ```text
 chmod +x send_event.sh
 ./send_event.sh  <JSON file name>
 ```
+*Note: If you are using a stream with a private endpoint and cannot reach the subnet on TCP/443 from your machine, you can bypass network restrictions by publishing a test message with the event JSON directly from the OCI Console. See [Publishing a Test Message to a Stream](https://docs.oracle.com/en-us/iaas/Content/Streaming/Tasks/publishingmessages.htm) for details.*
 
 Check Watchdog logs:
 ```test
