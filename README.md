@@ -125,9 +125,9 @@ kubectl create namespace wd
 #### Create Config Map
 Edit config.map file and set the following environment variables:
 ```text
-WD_STREAM_ID	        "OCID of your OCI Stream"
-WD_STREAM_ENDPOINT	    "Messages Endpoint URL"
-WD_NODEPOOL             "OKE nodepool name" 
+WD_STREAM_ID:	        "OCID of your OCI Stream"
+WD_STREAM_ENDPOINT:	    "Messages Endpoint URL"
+WD_NODEPOOL:             "OKE nodepool name" 
 ```
 
 Create the config map:
