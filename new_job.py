@@ -36,8 +36,9 @@ def create_drain_job(hostname, m_start=None):
     # Define namespace and nodepool the job will run
     nodepool_name = os.environ.get('WD_NODEPOOL')
     namespace = os.environ.get('WD_NAMESPACE', 'default')
-    print(f"Nodepool: {nodepool_name}", flush=True)
-    print(f"Namespace: {namespace}", flush=True)
+    # Configure k8s jobs parameters
+    ttl_seconds_after_finished = os.environ.get('WD_TTL_SECONDS_AFTER_FINISHED',3600)
+    backoff_limit = = os.environ.get('WD_BACKOFF_LIMIT',6)
 
     now = datetime.now(timezone.utc)
     # Set time zone in the cronjob time
@@ -63,7 +64,8 @@ def create_drain_job(hostname, m_start=None):
                schedule=cron_schedule,
                job_template=client.V1JobTemplateSpec(
                    spec=client.V1JobSpec(
-                      ttl_seconds_after_finished=3600,
+                      ttl_seconds_after_finished=ttl_seconds_after_finished,
+                      backoff_limit=backoff_limit,
                       template=client.V1PodTemplateSpec(
                         spec=client.V1PodSpec(
                             service_account_name="wd-service", # Ensure RBAC exists
@@ -118,7 +120,7 @@ def create_drain_job(hostname, m_start=None):
        )
        # Create the Job in the namespace
        try:
-          api_response = batch_v1.create_namespaced_job(namespace=namespace, body=job)
+          api_response = batch_v1.create_namespaced_job(namespace="wd", body=job)
           print("Job created. status='%s'" % str(api_response.status), flush=True)
           return api_response
        except Exception as e:
@@ -142,8 +144,9 @@ def create_uncordon_job(hostname):
     # Define namespace and nodepool the job will run
     nodepool_name = os.environ.get('WD_NODEPOOL')
     namespace = os.environ.get('WD_NAMESPACE', 'default')
-    print(f"Nodepool name: {nodepool_name}", flush=True)
-    print(f"Namespace: {namespace}", flush=True)
+    # Configure k8s jobs parameters
+    ttl_seconds_after_finished = os.environ.get('WD_TTL_SECONDS_AFTER_FINISHED',3600)
+    backoff_limit = os.environ.get('WD_BACKOFF_LIMIT',6)
 
     # Create an immediate job to uncordon the node
     print("Creating immediate uncordon job", flush=True)
@@ -154,7 +157,8 @@ def create_uncordon_job(hostname):
         kind="Job",
         metadata=client.V1ObjectMeta(name=job_name),
         spec=client.V1JobSpec(
-          ttl_seconds_after_finished=3600,
+          ttl_seconds_after_finished=ttl_seconds_after_finished,
+          backoff_limit=backoff_limit,
           template=client.V1PodTemplateSpec(
             spec=client.V1PodSpec(
               service_account_name="wd-service", # Ensure RBAC exists
@@ -171,7 +175,7 @@ def create_uncordon_job(hostname):
         )
     )
     try:
-       api_response = batch_v1.create_namespaced_job(namespace=namespace, body=job)
+       api_response = batch_v1.create_namespaced_job(namespace="wd", body=job)
        print("Job created. status='%s'" % str(api_response.status), flush=True)
        return api_response
     except Exception as e:

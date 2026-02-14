@@ -4,7 +4,10 @@ metadata:
   name: "wd"
   namespace: wd
 data:
-  WD_STREAM_ID	         "<OCID of your OCI Stream>"
-  WD_STREAM_ENDPOINT	 "<Messages Endpoint URL>".
-  WD_NODEPOOL            "<OKE nodepool name>"
-  WD_NAMESPACE           "wd" 
+  WD_STREAM_ID: "<OCID of your OCI Stream>"
+  WD_STREAM_ENDPOINT: "<Messages Endpoint URL>"
+  WD_NODEPOOL: "<OKE nodepool name>" # Nodepool name  where node draning jobs will run"
+  WD_NAMESPACE: "wd"  # k8s namespace where node draining jobs will run
+  WD_TTL_SECONDS_AFTER_FINISHED: "3600" # Automatically deletes a Job object a certain number of seconds after it completes or fails (if set to 0 completed jobs are not deleted)
+  WD_BACKOFF_LIMIT: "4" # The number of retries before marking a Job as failed (default is 6)
+
