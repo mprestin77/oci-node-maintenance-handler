@@ -37,8 +37,8 @@ def create_drain_job(hostname, m_start=None):
     nodepool_name = os.environ.get('WD_NODEPOOL')
     namespace = os.environ.get('WD_NAMESPACE', 'default')
     # Configure k8s jobs parameters
-    ttl_seconds_after_finished = os.environ.get('WD_TTL_SECONDS_AFTER_FINISHED',3600)
-    backoff_limit = os.environ.get('WD_BACKOFF_LIMIT',6)
+    ttl_seconds_after_finished = int(os.environ.get('WD_TTL_SECONDS_AFTER_FINISHED',"3600"))
+    backoff_limit = int(os.environ.get('WD_BACKOFF_LIMIT',"6"))
 
     now = datetime.now(timezone.utc)
     # Set time zone in the cronjob time
@@ -145,8 +145,8 @@ def create_uncordon_job(hostname):
     nodepool_name = os.environ.get('WD_NODEPOOL')
     namespace = os.environ.get('WD_NAMESPACE', 'default')
     # Configure k8s jobs parameters
-    ttl_seconds_after_finished = os.environ.get('WD_TTL_SECONDS_AFTER_FINISHED',3600)
-    backoff_limit = os.environ.get('WD_BACKOFF_LIMIT',6)
+    ttl_seconds_after_finished = int(os.environ.get('WD_TTL_SECONDS_AFTER_FINISHED',"3600"))
+    backoff_limit = int(os.environ.get('WD_BACKOFF_LIMIT',"6"))
 
     # Create an immediate job to uncordon the node
     print("Creating immediate uncordon job", flush=True)
