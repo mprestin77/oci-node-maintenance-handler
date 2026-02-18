@@ -75,10 +75,10 @@ Under Actions set **Action Type** to **Streaming**, set **Compartment** to the s
 *   **OCI CLI:** [Install and configure the OCI CLI](https://docs.oracle.com) with a valid configuration file for cluster access and local testing.
 *   **OKE Cluster Access:** Ensure you have [configured cluster access](https://docs.oracle.com) via your `kubeconfig` file.
 
-*Note: You can deploy the GitHub repository from your local machine, an OCI VM, or OCI Cloud Shell. If you are using a Cloud Shell all prerequesites including docker, kubectl, git and OCI CLI are already installed and configured there. You still need to [configured cluster access](https://docs.oracle.com).*
+*Note: You can deploy the GitHub repository from your local machine, an OCI VM, or OCI Cloud Shell. If you are using a Cloud Shell all prerequesites including docker, kubectl, git and OCI CLI are already installed and configured there. You still need to [configure cluster access](https://docs.oracle.com).*
 
 #### Copy Files from Github
-Install [git](https://github.com/git-guides/install-git) and clone the repository to your local machine or OCI staging VM:
+Install [git](https://github.com/git-guides/install-git) and clone the repository to your machine:
 ```text
 git clone https://github.com/mprestin77/oci-node-maintenance-handler.git
 ```
@@ -251,7 +251,7 @@ Save the script as send_event.sh. Add executable permission to the script and ru
 chmod +x send_event.sh
 ./send_event.sh  <JSON file name>
 ```
-*Note: If you are using a stream with a private endpoint and cannot reach the subnet on TCP/443 from your machine, you can bypass network restrictions by publishing a test message with the event JSON directly from the OCI Console. See [Publishing a Test Message to a Stream](https://docs.oracle.com/en-us/iaas/Content/Streaming/Tasks/publishingmessages.htm) for details.*
+*Note: If you are using a stream with a **private endpoint** and cannot reach the subnet on TCP/443 from your machine, you can bypass network restrictions by publishing a test message with the event JSON directly from the OCI Console. See [Publishing a Test Message to a Stream](https://docs.oracle.com/en-us/iaas/Content/Streaming/Tasks/publishingmessages.htm) for details. If you are using OCI Cloud Shell for deployment you can connect it to your VCN subnet using [Cloud Shell Private Networking](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro_topic-Cloud_Shell_Networking.htm#Cloud_Shell_Private_Access).
 
 Check Watchdog logs:
 ```test
