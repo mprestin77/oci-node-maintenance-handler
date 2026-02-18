@@ -75,7 +75,7 @@ Under Actions set **Action Type** to **Streaming**, set **Compartment** to the s
 *   **OCI CLI:** [Install and configure the OCI CLI](https://docs.oracle.com) with a valid configuration file for cluster access and local testing.
 *   **OKE Cluster Access:** Ensure you have [configured cluster access](https://docs.oracle.com) via your `kubeconfig` file.
 
-*Note: You can deploy the GitHub repository from your local machine, an OCI VM, or OCI Cloud Shell. If you are using a Cloud Shell all prerequesites including docker, kubectl, OCI CLI are already installed and configured there. OCI CLI You still need to [configured cluster access](https://docs.oracle.com).*
+*Note: You can deploy the GitHub repository from your local machine, an OCI VM, or OCI Cloud Shell. If you are using a Cloud Shell all prerequesites including docker, kubectl, OCI CLI are already installed and configured there. You still need to [configured cluster access](https://docs.oracle.com).*
 
 #### Copy Files from Github
 Install [git](https://github.com/git-guides/install-git) and clone the repository to your local machine or OCI staging VM:
