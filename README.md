@@ -253,7 +253,7 @@ chmod +x send_event.sh
 ```
 *Note: If you are using a stream with a **private endpoint** and cannot reach the subnet on TCP/443 from your machine, you can bypass network restrictions by publishing a test message with the event JSON directly from the OCI Console. See [Publishing a Test Message to a Stream](https://docs.oracle.com/en-us/iaas/Content/Streaming/Tasks/publishingmessages.htm) for details.* 
 
-*Note: If you are deploying the repository from OCI Cloud Shell using a stream with a **private endpoint**, you can connect Cloud Shell to your VCN subnet. [Cloud Shell Private Networking](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro_topic-Cloud_Shell_Networking.htm#Cloud_Shell_Private_Access).*
+*Note: If you are deploying the repository from OCI Cloud Shell using a stream with a **private endpoint**, you can connect Cloud Shell to your VCN subnet as described in [Cloud Shell Private Networking](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro_topic-Cloud_Shell_Networking.htm#Cloud_Shell_Private_Access).*
 
 Check Watchdog logs:
 ```test
